@@ -4,7 +4,7 @@ set -e -u
 # This script sets up clean Ubuntu host machine for bitrix.infra
 # and recovers site files and the DB content from the backup.
 
-domain="favor-group.ru"
+domain="dev.specavto.info"
 backup_s3_directory=favor-group-backup
 duplicity_backup_location="boto3+s3://${backup_s3_directory}/duplicity_web_favor-group"
 mysql_restore_hostname="favor-group"
@@ -270,7 +270,7 @@ start_services() {
 }
 
 check_zabbix_hostname() {
-  default_zabbix_hostname="favor-group.ru.docker"
+  default_zabbix_hostname="dev.specavto.info.docker"
   if [ "$(grep ZBX_HOSTNAME docker-compose.yml | cut -d '=' -f 2)" = "${default_zabbix_hostname}" ]; then
     echo "\
 \n\nChange ZBX_HOSTNAME=${default_zabbix_hostname} to other hostname in docker-compose.yml \

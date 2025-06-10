@@ -8,7 +8,7 @@ from lxml.html import fromstring
 import requests
 
 _redirects_map_path = '../config/nginx/conf.d/redirects-map.conf'
-_default_site = 'https://favor-group.ru'
+_default_site = 'https://dev.specavto.info'
 
 
 class RunTypes(Enum):
@@ -96,7 +96,7 @@ def main(run_type: str, site: str, urls_file: str, update_redirects: bool):
             continue
         if run_type == "titles":
             title = fromstring(resp.content).findtext('.//title')
-            url = resp.url.removeprefix("https://favor-group.ru")
+            url = resp.url.removeprefix("https://dev.specavto.info")
             print(f"{url};{title}")
         if run_type == "redirects":
             url_checker.check_redirect(resp, absolute_url)

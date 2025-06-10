@@ -13,10 +13,10 @@ robots_files=$(ls -1 web/*/aspro_regions/robots/*.txt)
 for f in $robots_files; do
   filename=$(basename "${f}")
   case $filename in
-  robots_favor-group.ru.txt)
+  robots_dev.specavto.info.txt)
     echo "Ignoring ${f}"
     ;;
-  robots_tula.favor-group.ru.txt)
+  robots_tula.dev.specavto.info.txt)
     echo "Processing ${f}"
     # disallow blog and montag section
     perl -0777 -pi -e 's/^(Disallow: \/bitrix\/\*)\s+(Allow)/\1\nDisallow: \/info\/blog\/\n\2/gm' "${f}"

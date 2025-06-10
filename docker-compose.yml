@@ -1,37 +1,15 @@
-# Yandex.Cloud external IP with DDoS Protection enabled has a requirement of MTU of 1450
-# according to https://github.com/moby/moby/issues/22297#issuecomment-242934050 that's the only way to set it inside docker-compose
-networks:
-  default:
-    driver: bridge
-    driver_opts:
-      com.docker.network.driver.mtu: 1450
-
 services:
   certbot:
-    image: adferrand/dnsrobocert
+    image: certbot/certbot
+    command: 
+      - certonly
     hostname: certbot
     container_name: certbot
     profiles:
       - certs
     volumes:
       - ./private/letsencrypt:/etc/letsencrypt
-      # needed for nginx container autorestart, https://dnsrobocert.readthedocs.io/en/latest/configuration_reference.html#autorestart
-      - /var/run/docker.sock:/var/run/docker.sock
-      # should be in the following format:
-      # https://dnsrobocert.readthedocs.io/en/latest/user_guide.html#configuration
-      - ./config/dnsrobocert.yml:/etc/dnsrobocert/config.yml
-
-    # For yandexcloud:
-    # AUTH_KEY must be provided, short-lived and set by scripts/update-dns-token.sh
-    # DNS_ZONE_ID from https://console.cloud.yandex.com/link/dns or
-    # CLOUD_ID, FOLDER_ID from https://console.cloud.yandex.com/cloud can be provided
-    env_file: private/environment/dnsrobocert.env
-    # used in config/dnsrobocert.yml
-    environment:
-      - PROVIDER=yandexcloud
-      - EMAIL=tech@favor-group.ru
-      - DOMAIN=favor-group.ru
-
+    env_file: private/environment/certbot.env
     logging:
       driver: json-file
       options:
@@ -164,7 +142,7 @@ services:
       # Logs
       - ./logs/mysql:/var/log/mysql
     environment:
-      MYSQL_DATABASE: favor_group_ru
+      MYSQL_DATABASE: specavto
       TZ: Europe/Moscow
     cap_add:
       - SYS_NICE  # CAP_SYS_NICE
@@ -295,7 +273,7 @@ services:
     volumes:
       - ./web/dev:/home/web
     environment:
-      PUBLICHOST: favor-group.ru
+      PUBLICHOST: specavto.ru
       FTP_USER_HOME: /home/web
       FTP_PASSIVE_PORTS: 30000:30009
     profiles:

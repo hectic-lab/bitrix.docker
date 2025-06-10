@@ -1,6 +1,6 @@
 # Bitrix infrastructure as a code [![Build Status](https://github.com/paskal/bitrix.infra/workflows/build/badge.svg)](https://github.com/paskal/bitrix.infra/actions/workflows/ci-build.yml) [![PHP Build Status](https://github.com/paskal/bitrix.infra/workflows/build-php/badge.svg)](https://github.com/paskal/bitrix.infra/actions/workflows/ci-build-php.yml) [![Pull Status](https://github.com/paskal/bitrix.infra/workflows/pull/badge.svg)](https://github.com/paskal/bitrix.infra/actions/workflows/ci-pull.yml)
 
-This repository contains infrastructure code behind Bitrix-based [site](https://favor-group.ru) of my father's metal decking business operating in multiple cities.
+This repository contains infrastructure code behind Bitrix-based [site](https://dev.specavto.info) of my father's metal decking business operating in multiple cities.
 
 It's a Bitrix website completely enclosed within docker-compose to be as portable and maintainable as possible, and a set of scripts around its maintenance like dev site redeploy or production site backup.
 
@@ -16,8 +16,8 @@ Follow these steps to get your Bitrix environment up and running:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/paskal/bitrix.infra.git
-    cd bitrix.infra
+    git clone https://github.com/hectic-lab/bitrix.docker.git
+    cd bitrix.docker
     ```
 
 2.  **Create Environment Files:**

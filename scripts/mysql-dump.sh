@@ -3,7 +3,7 @@
 set -e -u
 
 backup_s3_directory=favor-group-backup
-domain=favor-group.ru
+domain=dev.specavto.info
 prod_db=$(echo ${domain} | tr '.' '_' | tr '-' '_')
 date="$(date +%Y-%m-%d)"
 time="$(date +%H-%M-%S)"
