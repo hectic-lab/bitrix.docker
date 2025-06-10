@@ -236,29 +236,29 @@ services:
     restart: unless-stopped
 
   # webhooks server
-  updater:
-    image: ghcr.io/umputun/updater:master
-    container_name: updater
-    hostname: updater
-    profiles:
-      - hooks
-    restart: always
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "5"
-    # KEY variable
-    env_file: private/environment/updater.env
-    environment:
-      - LISTEN=0.0.0.0:8080
-      - CONF=/etc/updater.yml
-      - APP_UID=1000
-    ports:
-      - "8080"
-    volumes:
-      - ./config/updater.yaml:/etc/updater.yml
-      - ./private/updater_ssh_key:/home/app/.ssh/id_rsa
+  # updater:
+  #   image: ghcr.io/umputun/updater:master
+  #   container_name: updater
+  #   hostname: updater
+  #   profiles:
+  #     - hooks
+  #   restart: always
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "5"
+  #   # KEY variable
+  #   env_file: private/environment/updater.env
+  #   environment:
+  #     - LISTEN=0.0.0.0:8080
+  #     - CONF=/etc/updater.yml
+  #     - APP_UID=1000
+  #   ports:
+  #     - "8080"
+  #   volumes:
+  #     - ./config/updater.yaml:/etc/updater.yml
+  #     - ./private/updater_ssh_key:/home/app/.ssh/id_rsa
 
   # FTP access
 
