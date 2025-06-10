@@ -75,6 +75,8 @@ services:
       - ./private/msmtprc:/etc/msmtprc
       # MySQL socket to prevent transferring data through TCP
       - ./private/mysqld:/var/run/mysqld
+      # PostgreSQL socket to prevent transferring data through TCP
+      - ./private/pgsql-socket:/var/run/postgresql
       # Logs
       - ./logs/php:/var/log/php
       # configuration
@@ -108,6 +110,8 @@ services:
       - ./private/msmtprc:/etc/msmtprc
       # MySQL socket to prevent transferring data through TCP
       - ./private/mysqld:/var/run/mysqld
+      # PostgreSQL socket to prevent transferring data through TCP
+      - ./private/pgsql-socket:/var/run/postgresql
       # configuration
       - ./config/php/90-php.ini:/etc/php/8.2/cli/conf.d/90-php.ini
       # Cronjobs
@@ -145,6 +149,31 @@ services:
       TZ: Europe/Moscow
     cap_add:
       - SYS_NICE  # CAP_SYS_NICE
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    restart: unless-stopped
+
+  postgres:
+    image: postgres
+    hostname: postgres
+    container_name: postgres
+    shm_size: 128mb
+    env_file: private/environment/postgresql.env
+    volumes:
+      # Configuration
+      - ./config/postgres/postgresql.conf:/etc/postgresql/postgresql.conf
+      # Data persistence
+      - ./private/postgres-data:/var/lib/postgresql/data
+      # PostgreSQL socket to prevent transferring data through TCP
+      # do chown 1001:1001 ./private/pgsql-socket
+      - ./private/pgsql-socket:/var/run/postgresql
+      # Logs
+      - ./logs/postgres:/var/log/postgresql
 
     logging:
       driver: json-file
@@ -198,39 +227,39 @@ services:
   # Monitoring
 
   ## Zabbix Agent 2
-  zabbix-agent:
-    build: ./config/zabbix
-    image: ghcr.io/paskal/zabbix-agent2:latest
-    container_name: zabbix-agent
-    profiles:
-      - monitoring
-    privileged: true
-    # MYSQL_USER, MYSQL_PASSWORD
-    # ZBX_HOSTNAME, ZBX_SERVER_HOST
-    env_file:
-      - private/environment/mysql.env
-      - private/environment/zabbix.env
-    depends_on:
-      - nginx
-      - memcached
-    volumes:
-      # for monitoring purposes
-      - ./logs/nginx:/var/log/nginx
-      # for monitoring purposes
-      - ./web/prod/upload:/web/prod/upload
-      # this is needed in order to monitor docker
-      # to make it work you need to create user "zabbix" with id 1997 on the host system,
-      # and make sure it has enough permissions to read /var/run/docker.sock
-      - /var/run/docker.sock:/var/run/docker.sock
-      # MySQL socket to prevent transferring data through TCP
-      - ./private/mysqld:/var/run/mysqld
+  #zabbix-agent:
+  #  build: ./config/zabbix
+  #  image: ghcr.io/paskal/zabbix-agent2:latest
+  #  container_name: zabbix-agent
+  #  profiles:
+  #    - monitoring
+  #  privileged: true
+  #  # MYSQL_USER, MYSQL_PASSWORD
+  #  # ZBX_HOSTNAME, ZBX_SERVER_HOST
+  #  env_file:
+  #    - private/environment/mysql.env
+  #    - private/environment/zabbix.env
+  #  depends_on:
+  #    - nginx
+  #    - memcached
+  #  volumes:
+  #    # for monitoring purposes
+  #    - ./logs/nginx:/var/log/nginx
+  #    # for monitoring purposes
+  #    - ./web/prod/upload:/web/prod/upload
+  #    # this is needed in order to monitor docker
+  #    # to make it work you need to create user "zabbix" with id 1997 on the host system,
+  #    # and make sure it has enough permissions to read /var/run/docker.sock
+  #    - /var/run/docker.sock:/var/run/docker.sock
+  #    # MySQL socket to prevent transferring data through TCP
+  #    - ./private/mysqld:/var/run/mysqld
 
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "5"
-    restart: unless-stopped
+  #  logging:
+  #    driver: json-file
+  #    options:
+  #      max-size: "10m"
+  #      max-file: "5"
+  #  restart: unless-stopped
 
   # webhooks server
   # updater:
