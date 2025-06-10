@@ -9,7 +9,6 @@ services:
       - certs
     volumes:
       - ./private/letsencrypt:/etc/letsencrypt
-    env_file: private/environment/certbot.env
     logging:
       driver: json-file
       options:
