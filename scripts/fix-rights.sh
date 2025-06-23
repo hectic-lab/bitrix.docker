@@ -22,6 +22,12 @@ chown -R 1001:1001 ./config/mysql
 [ -d ./private/mysql-data ] && chown -R 1001:1001 ./private/mysql-data
 [ -d ./private/mysqld ] && chown -R 1001:1001 ./private/mysqld
 
+# postgres container files
+echo "Fixing postgres permissions..."
+[ -d ./logs/mysql ] && chown -R 999:999 ./logs/postgres
+[ -d ./private/postgres-data ] && chown -R 999:999 ./private/postgres-data
+[ -d ./private/pgsql-socket ] && chown -R 999:999 ./private/pgsql-socket
+
 # php and nginx containers files
 echo "Fixing php and nginx permissions..."
 [ -d ./logs/nginx ] && chown -R 1000:1000 ./logs/nginx

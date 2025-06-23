@@ -159,9 +159,11 @@ services:
     restart: unless-stopped
 
   postgres:
-    image: postgres
+    image: postgres:12
     hostname: postgres
     container_name: postgres
+    profiles:
+      - postgres
     shm_size: 128mb
     env_file: private/environment/postgresql.env
     volumes:
